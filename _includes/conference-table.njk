@@ -97,7 +97,16 @@ th {
 {% dumpConferenceData %}
   `;
 
-  var eventData = jsyaml.load(yamlData);
+  var loadedEventData = jsyaml.load(yamlData);
+
+  function sortByFromDateAsc(events) {
+    return events.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate));
+  }
+
+console.log(loadedEventData);
+
+  var eventData = sortByFromDateAsc(loadedEventData);
+
 
   function createTable() {
     var tbody = document.getElementById("eventTableBody");
