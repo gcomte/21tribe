@@ -5,7 +5,11 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conferences</title>
+
+<link rel="shortcut icon" href="https://bitcoin.org/favicon.png?1706112497">
+<link rel="apple-touch-icon-precomposed" href="https://bitcoin.org/img/icons/logo_ios.png?1706112497"/>
+
+  <title>21 TRIBE</title>
 
 <style>
 * {
@@ -185,15 +189,24 @@ th {
   city: Prague
   country: Czech Republic
   gmaps: https://maps.app.goo.gl/w9k7LQkdyb7PcajS9
-  fromDate: 2024-03-01
-  toDate: 2024-03-03
+  fromDate: 2024-06-13
+  toDate: 2024-06-15
   topic: Big conference
   language: en 
   website: https://www.btcprague.com/
 
   `;
 
-  var eventData = jsyaml.load(yamlData);
+  var loadedEventData = jsyaml.load(yamlData);
+
+  function sortByFromDateAsc(events) {
+    return events.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate));
+  }
+
+console.log(loadedEventData);
+
+  var eventData = sortByFromDateAsc(loadedEventData);
+
 
   function createTable() {
     var tbody = document.getElementById("eventTableBody");
