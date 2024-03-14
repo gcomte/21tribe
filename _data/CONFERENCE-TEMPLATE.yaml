@@ -1,9 +1,0 @@
-- title: Conference Title
-  city: Conference City
-  country: Conference Country
-  gmaps: https://maps.app.goo.gl/hQuvyZbkLA8i1iKR7
-  fromDate: 2024-03-01
-  toDate: 2024-03-03
-  topic: Conference Topic
-  language: en  # ISO 639-1 language code 
-  website:  https://www.conferencelink.com
