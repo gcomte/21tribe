@@ -1,0 +1,117 @@
+<style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #444;
+}
+
+tr:hover td {
+  color: white;
+}
+
+@media screen and (max-width: 600px) {
+  th, td {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  table {
+    font-size: 14px;
+  }
+}
+
+</style>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>City</th>
+      <th>Country</th>
+      <th>From Date</th>
+      <th>To Date</th>
+      <th>Topic</th>
+      <th>Language</th>
+    </tr>
+  </thead>
+  <tbody id="eventTableBody">
+    <!-- Rows will be dynamically added here -->
+  </tbody>
+</table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+
+
+<script>
+  var yamlData = `
+{% dumpConferenceData %}
+  `;
+
+  // Convert YAML to JavaScript object
+  var eventData = jsyaml.load(yamlData);
+
+  // Function to create and fill the table
+  function createTable() {
+    var tbody = document.getElementById("eventTableBody");
+
+    for (var i = 0; i < eventData.length; i++) {
+      var row = tbody.insertRow();
+
+      // Add Title as a link
+      var titleCell = row.insertCell();
+      var titleLink = document.createElement("a");
+      titleLink.href = eventData[i].website;
+      titleLink.textContent = eventData[i].title;
+      titleCell.appendChild(titleLink);
+
+      // Add City as a link
+      var cityCell = row.insertCell();
+      var cityLink = document.createElement("a");
+      cityLink.href = eventData[i].gmaps;
+      cityLink.textContent = eventData[i].city;
+      cityCell.appendChild(cityLink);
+
+      // Add other cells
+      var countryCell = row.insertCell();
+      countryCell.textContent = eventData[i].country;
+
+      var fromDateCell = row.insertCell();
+      fromDateCell.textContent = formatDate(eventData[i].fromDate);
+
+      var toDateCell = row.insertCell();
+      toDateCell.textContent = formatDate(eventData[i].toDate);
+
+      var topicCell = row.insertCell();
+      topicCell.textContent = eventData[i].topic;
+
+      var languageCell = row.insertCell();
+      languageCell.textContent = eventData[i].language;
+    }
+  }
+
+  function formatDate(dateString) {
+    var userLocale = navigator.language || 'en-US';
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    var date = new Date(dateString);
+    return date.toLocaleDateString(userLocale, options);
+  }
+  
+  createTable();
+</script>
+
