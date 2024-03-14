@@ -98,25 +98,56 @@ th {
   background-color: #f2f2f2;
 }
 
-tr:hover {
-  background-color: #444;
-}
-
-tr:hover td {
-  color: white;
-}
-
-@media screen and (max-width: 600px) {
-  th, td {
-    padding: 6px;
-    font-size: 12px;
+@media only screen and (min-width: 601px) {
+  tr:hover {
+    background-color: #444;
   }
 
-  table {
-    font-size: 14px;
+  tr:hover td {
+    color: white;
   }
 }
 
+@media only screen and (max-width: 600px) {
+    /* For mobile devices, stack headers and data vertically */
+    table thead {
+      display: none;
+    }
+
+    table tbody tr {
+      display: block;
+      margin-bottom: 28px;
+      border: 1px #444 solid;
+      background: #f2f2f2;
+    }
+
+    table tbody td {
+      display: block;
+      position: relative;
+      text-align: right;
+      border: none;
+      font-size: 18px;
+    }
+
+    tr td:nth-child(even) {
+      background-color: #fff;
+    }
+
+    table tbody td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      display: block;
+      position: absolute;
+      left: 5;
+      //top: 0;
+    }
+
+    tr td:first-child {
+      text-align: center;
+      background-color: #444;
+      font-size: 20px;
+    }
+  }
 </style>
 
 <table>
@@ -162,45 +193,46 @@ tr:hover td {
 
   `;
 
-  // Convert YAML to JavaScript object
   var eventData = jsyaml.load(yamlData);
 
-  // Function to create and fill the table
   function createTable() {
     var tbody = document.getElementById("eventTableBody");
 
     for (var i = 0; i < eventData.length; i++) {
       var row = tbody.insertRow();
 
-      // Add Title as a link
       var titleCell = row.insertCell();
       var titleLink = document.createElement("a");
       titleLink.href = eventData[i].website;
       titleLink.textContent = eventData[i].title;
       titleCell.appendChild(titleLink);
 
-      // Add City as a link
       var cityCell = row.insertCell();
       var cityLink = document.createElement("a");
       cityLink.href = eventData[i].gmaps;
       cityLink.textContent = eventData[i].city;
       cityCell.appendChild(cityLink);
+      cityCell.setAttribute('data-label', 'City');
 
-      // Add other cells
       var countryCell = row.insertCell();
       countryCell.textContent = eventData[i].country;
+      countryCell.setAttribute('data-label', 'Country');
 
       var fromDateCell = row.insertCell();
       fromDateCell.textContent = formatDate(eventData[i].fromDate);
+      fromDateCell.setAttribute('data-label', 'From Date');
 
       var toDateCell = row.insertCell();
       toDateCell.textContent = formatDate(eventData[i].toDate);
+      toDateCell.setAttribute('data-label', 'To Date');
 
       var topicCell = row.insertCell();
       topicCell.textContent = eventData[i].topic;
+      topicCell.setAttribute('data-label', 'Topic');
 
       var languageCell = row.insertCell();
       languageCell.textContent = eventData[i].language;
+      languageCell.setAttribute('data-label', 'Language');
     }
   }
 
