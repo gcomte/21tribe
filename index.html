@@ -79,6 +79,7 @@ a {
 	  <style>
 body {
   font-family: Arial, sans-serif;
+  font-size: 18px;
 }
 
 table {
@@ -92,16 +93,18 @@ th, td {
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #444;
+  color: #fff;
 }
 
 @media only screen and (min-width: 601px) {
   tr:hover {
-    background-color: #444;
+    background-color: #444 !important;
+    color: #fff;
   }
 
-  tr:hover td {
-    color: white;
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
   }
 }
 
@@ -250,8 +253,8 @@ th {
 footer {
   text-align: center;
   background-color: #444;
-  padding-top: 5px;
-  padding-bottom: 2px;
+  padding-top: 8px;
+  padding-bottom: 4px;
   margin-top: 20px;
 }
 
