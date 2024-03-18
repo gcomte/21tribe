@@ -19,6 +19,33 @@ th {
   color: #fff;
 }
 
+.mini-calendar {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.months {
+  font-size: 13px;
+}
+.days {
+  font-weight: bold;
+  font-size: 17px;
+}
+.main-date {
+  flex: 1;
+  margin-right: auto;
+  white-space: nowrap;
+}
+.year {
+  display: none;
+  position: absolute;
+  color: #fff;
+  background: #444;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 @media only screen and (min-width: 601px) {
   tr:hover {
     background-color: #444 !important;
@@ -65,9 +92,13 @@ th {
     }
 
     tr td:first-child {
-      text-align: center;
       background-color: #444;
       font-size: 20px;
+      color: #fff;
+    }
+
+    tr td:nth-child(2){
+      display: none;
     }
   }
 </style>
@@ -76,10 +107,9 @@ th {
   <thead>
     <tr>
       <th>Title</th>
+      <th>Date</th>
       <th>City</th>
       <th>Country</th>
-      <th>From Date</th>
-      <th>To Date</th>
       <th>Topic</th>
       <th>Language</th>
     </tr>
@@ -107,7 +137,6 @@ console.log(loadedEventData);
 
   var eventData = sortByFromDateAsc(loadedEventData);
 
-
   function createTable() {
     var tbody = document.getElementById("eventTableBody");
 
@@ -119,6 +148,11 @@ console.log(loadedEventData);
       titleLink.href = eventData[i].website;
       titleLink.textContent = eventData[i].title;
       titleCell.appendChild(titleLink);
+      titleCell.setAttribute('data-label', textifyDate(eventData[i].fromDate, eventData[i].toDate));
+
+      var dateCell = row.insertCell();
+      dateCell.classList.add("mini-calendar");
+      dateCell.innerHTML = formatDate(eventData[i].fromDate, eventData[i].toDate);
 
       var cityCell = row.insertCell();
       var cityLink = document.createElement("a");
@@ -131,14 +165,6 @@ console.log(loadedEventData);
       countryCell.textContent = eventData[i].country;
       countryCell.setAttribute('data-label', 'Country');
 
-      var fromDateCell = row.insertCell();
-      fromDateCell.textContent = formatDate(eventData[i].fromDate);
-      fromDateCell.setAttribute('data-label', 'From Date');
-
-      var toDateCell = row.insertCell();
-      toDateCell.textContent = formatDate(eventData[i].toDate);
-      toDateCell.setAttribute('data-label', 'To Date');
-
       var topicCell = row.insertCell();
       topicCell.textContent = eventData[i].topic;
       topicCell.setAttribute('data-label', 'Topic');
@@ -149,13 +175,69 @@ console.log(loadedEventData);
     }
   }
 
-  function formatDate(dateString) {
-    var userLocale = navigator.language || 'en-US';
-    var options = { year: 'numeric', month: 'long', day: 'numeric' };
-    var date = new Date(dateString);
-    return date.toLocaleDateString(userLocale, options);
+  function formatDate(start, end) {
+    const years = yearsConcat(start, end);
+    const months = monthsConcat(start, end);
+    const days = daysConcat(start, end);
+
+    return `
+           <div class="main-date">
+	     <div class="months">${months}</div>
+             <div class="days">${days}</div>
+             <div class="year">${years}</div>
+	   </div>
+            `;
+  }
+
+  function textifyDate(start, end) {
+    const startMonth = start.toLocaleString('default', { month: 'short' });
+    const endMonth = end.toLocaleString('default', { month: 'short' });
+
+    if(startMonth === endMonth) {
+	return `${startMonth} ${daysConcat(start, end)}`;
+    }
+
+    return `${startMonth} ${start.getDate()} - ${endMonth} ${end.getDate()}`;
+  }
+
+  function daysConcat(start, end) {
+    const startDay = start.getDate();
+    const endDay = end.getDate();
+
+    return startDay === endDay ? startDay : `${startDay} - ${endDay}`;
+  }
+
+  function monthsConcat(start, end) {
+    const startMonth = start.toLocaleString('default', { month: 'short' });
+    const endMonth = end.toLocaleString('default', { month: 'short' });
+
+    return startMonth === endMonth ? startMonth : `${startMonth} - ${endMonth}`;
   }
   
+  function yearsConcat(start, end) {
+    const startYear = start.getFullYear();
+    const endYear = end.getFullYear();
+
+    return startYear === endYear ? startYear : `${startYear} - ${endYear}`;
+  }
+
   createTable();
+
+  document.addEventListener("DOMContentLoaded", function() {
+  var tds = document.querySelectorAll(".mini-calendar");
+
+  tds.forEach(function(td) {
+    var year = td.querySelector(".year");
+
+    td.addEventListener("mouseenter", function() {
+      year.style.display = "block";
+    });
+
+    td.addEventListener("mouseleave", function() {
+      year.style.display = "none";
+    });
+  });
+});
+
 </script>
 
