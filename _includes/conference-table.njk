@@ -10,14 +10,18 @@ th, td {
 }
 
 th {
-  background-color: #444;
+  background: #444;
   color: #fff;
+}
+.mini-calendar-td {
+  padding: 0px;
 }
 
 .mini-calendar {
   display: flex;
   align-items: center;
   text-align: center;
+  padding: 8px;
 }
 .months {
   font-size: 13px;
@@ -43,12 +47,12 @@ th {
 
 @media only screen and (min-width: 601px) {
   tr:hover {
-    background-color: #444 !important;
+    background: #444 !important;
     color: #fff;
   }
 
   tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background: #f2f2f2;
   }
 }
 
@@ -74,7 +78,7 @@ th {
     }
 
     tr td:nth-child(even) {
-      background-color: #fff;
+      background: #fff;
     }
 
     table tbody td::before {
@@ -87,7 +91,7 @@ th {
     }
 
     tr td:first-child {
-      background-color: #444;
+      background: #444;
       font-size: 16px;
       color: #fff;
     }
@@ -146,7 +150,7 @@ console.log(loadedEventData);
       titleCell.setAttribute('data-label', textifyDate(eventData[i].fromDate, eventData[i].toDate));
 
       var dateCell = row.insertCell();
-      dateCell.classList.add("mini-calendar");
+      dateCell.classList.add("mini-calendar-td");
       dateCell.innerHTML = formatDate(eventData[i].fromDate, eventData[i].toDate);
 
       var cityCell = row.insertCell();
@@ -176,12 +180,14 @@ console.log(loadedEventData);
     const days = daysConcat(start, end);
 
     return `
+        <div class="mini-calendar">
            <div class="main-date">
 	     <div class="months">${months}</div>
              <div class="days">${days}</div>
              <div class="year">${years}</div>
 	   </div>
-            `;
+	</div>
+    `;
   }
 
   function textifyDate(start, end) {
