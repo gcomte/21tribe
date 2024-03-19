@@ -21,6 +21,9 @@ Community-driven calendar for Bitcoin events: [21tribe.site](https://21tribe.sit
 [ ] Filter by language  
 [ ] Filter by continent  
 [ ] List past events  
+[ ] CSV export (using applied filters  
+[ ] Calendar entry export ([.ics](https://icalendar.org/)) per event  
+[ ] Calendar entry export ([.ics](https://icalendar.org/)) for entire list, using applied filters  
 [ ] Map view  
 [ ] More convenient way to add events  
 
