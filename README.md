@@ -1,6 +1,6 @@
 # 21 TRIBE
 
-Community-driven calendar for Bitcoin events
+Community-driven calendar for Bitcoin events: [21tribe.site](https://21tribe.site)
 
 ### Add Events
 1. Copy [this template](https://github.com/gcomte/21tribe/blob/main/_data/CONFERENCE-TEMPLATE.yaml) and fill out *all* necessary information as accurately as possible.  
