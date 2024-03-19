@@ -10,7 +10,7 @@ Community-driven calendar for Bitcoin events: [21tribe.site](https://21tribe.sit
     - If the point above is is too hard for you, submit your file to [our Telegram group](https://t.me/btctribe).
 4. Be available for potential questions about the event and wait  
 5. Update us about any changes through a PR or in the telegram group
-6. For some extra reach, tweet that you added your conference! `Just added [conference name] to 21tribe.site! @the21tribe`. We will retweet!
+6. For even more visibility, [share on X](https://twitter.com/intent/tweet?text=Just%20added%20%5BCONFERENCE-NAME%5D%20to%2021tribe.site%21%20%40the21tribe) that you've included your conference! We will retweet!
 
 ### Minimal Events Index
 
