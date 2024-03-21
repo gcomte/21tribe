@@ -3,7 +3,6 @@ const path = require('path');
 const jsyaml = require('js-yaml');
 
 module.exports = function (eleventyConfig) {
-  // Add a shortcode to read and dump file content
   eleventyConfig.addShortcode('dumpConferenceData', function () {
     const conferenceDataPath = '_data/conferences/';
     const files = fs.readdirSync(conferenceDataPath);
@@ -20,4 +19,8 @@ module.exports = function (eleventyConfig) {
 
     return JSON.stringify(events, null, null);
   });
+
+
+  const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minifier");
+  eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
 };
