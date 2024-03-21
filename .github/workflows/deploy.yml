@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies & build
         run: |
           npm ci
-          npm run build          
+          npm run build
 
       - name: Create CNAME file
         run: echo "${{ secrets.CNAME_URL }}" > ./_site/CNAME
