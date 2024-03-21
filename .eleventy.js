@@ -18,6 +18,6 @@ module.exports = function (eleventyConfig) {
 
     var events = jsyaml.load(yamlData);
 
-    return JSON.stringify(events, null, 2);
+    return JSON.stringify(events, null, null);
   });
 };
