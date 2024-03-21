@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const jsyaml = require('js-yaml');
+const syncRequest = require('sync-request');
 
 module.exports = function (eleventyConfig) {
   eleventyConfig.addShortcode('dumpConferenceData', function () {
@@ -16,6 +17,16 @@ module.exports = function (eleventyConfig) {
     });
 
     var events = jsyaml.load(yamlData);
+    const countries = [...new Set(events.map(event => event.country))];
+
+    const countriesWithContinents = countries.map(country => {
+      const continent = getContinent(country);
+      return { country, continent };
+    });
+
+    events.forEach((event) => {
+        event.continent = countriesWithContinents.find(c => c.country === event.country).continent;
+    });
 
     return JSON.stringify(events, null, null);
   });
@@ -24,3 +35,18 @@ module.exports = function (eleventyConfig) {
   const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minifier");
   eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
 };
+
+
+function makeSyncGETRequest(url) {
+    const response = syncRequest('GET', url);
+    return response.getBody('utf8');
+}
+
+function getContinent(country) {
+  const url = `https://restcountries.com/v3.1/name/${country}`;
+
+  const response = makeSyncGETRequest(url);
+  const data = JSON.parse(response);
+
+  return data[0].continents[0];
+}

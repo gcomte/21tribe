@@ -119,7 +119,8 @@ th {
 </table>
 
 <script>
-  var eventsData = {% dumpConferenceData %};
+  const eventsData = {% dumpConferenceData %};
+  const continents = [...new Set(eventsData.map(event => event.continent))];
 
   function sortByFromDateAsc(events) {
     return events.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate));
