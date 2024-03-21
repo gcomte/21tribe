@@ -20,7 +20,7 @@ Community-driven calendar for Bitcoin events: [21tribe.site](https://21tribe.sit
 
 [ ] Filter by dates  
 [ ] Filter by language  
-[ ] Filter by continent  
+[x] Filter by continent  
 [ ] List past events  
 [ ] CSV export (using applied filters  
 [ ] Calendar entry export ([.ics](https://icalendar.org/)) per event  
@@ -35,4 +35,3 @@ I lack expertise in design and front-end development. However, recognizing the l
 
 So any help is welcome!  
 Get in touch with us on [Telegram](https://t.me/btctribe)
-
