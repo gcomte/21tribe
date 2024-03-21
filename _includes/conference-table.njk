@@ -45,6 +45,14 @@ th {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.continent-filters {
+  margin-bottom: 15px;
+}
+
+.continent-filters .button {
+  margin: 10px;
+}
+
 @media only screen and (min-width: 601px) {
   tr:hover {
     background: #333 !important;
@@ -102,6 +110,8 @@ th {
   }
 </style>
 
+<div class="continent-filters"></div>
+
 <table>
   <thead>
     <tr>
@@ -119,17 +129,73 @@ th {
 </table>
 
 <script>
+  const continentFiltersDiv = document.querySelector('.continent-filters');
+  const tbody = document.getElementById("eventTableBody");
+
   const eventsData = {% dumpConferenceData %};
   const continents = [...new Set(eventsData.map(event => event.continent))];
+  let continentFilter = continents.map(continent => ({
+    name: continent,
+    show: true
+  }));
+
+  continents.forEach(continent => {
+    const button = document.createElement('div');
+    button.classList.add('button');
+    button.textContent = continent;
+    continentFiltersDiv.appendChild(button);
+
+    button.addEventListener('click', () => {
+      continentFilter.forEach(cf => {
+        if (continent === cf.name) {
+            if (cf.show === true) {
+              cf.show = false;
+              button.classList.add('button-white-with-border');
+            } else {
+              cf.show = true;
+              button.classList.remove('button-white-with-border');
+            }
+        }
+      });
+
+      createTable();
+    });
+  });
+
+  createTable();
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var tds = document.querySelectorAll(".mini-calendar");
+
+    tds.forEach(function(td) {
+      var year = td.querySelector(".year");
+
+      td.addEventListener("mouseenter", function() {
+        year.style.display = "block";
+      });
+
+      td.addEventListener("mouseleave", function() {
+        year.style.display = "none";
+      });
+    });
+  });
+
+  function createTable() {
+  console.log(continentFilter);
+    var events = sortByFromDateAsc(filterEventsByContinent(eventsData, continentFilter));
+    drawTable(events);
+  }
+
+  function filterEventsByContinent(events, continentFilter) {
+    return events.filter(event => continentFilter.find(continent => continent.name === event.continent && continent.show));
+  }
 
   function sortByFromDateAsc(events) {
     return events.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate));
   }
 
-  var events = sortByFromDateAsc(eventsData);
-
-  function createTable() {
-    var tbody = document.getElementById("eventTableBody");
+  function drawTable(events) {
+    tbody.innerHTML = "";
 
     for (var i = 0; i < events.length; i++) {
       var row = tbody.insertRow();
@@ -213,24 +279,5 @@ th {
 
     return startYear === endYear ? startYear : `${startYear} - ${endYear}`;
   }
-
-  createTable();
-
-  document.addEventListener("DOMContentLoaded", function() {
-  var tds = document.querySelectorAll(".mini-calendar");
-
-  tds.forEach(function(td) {
-    var year = td.querySelector(".year");
-
-    td.addEventListener("mouseenter", function() {
-      year.style.display = "block";
-    });
-
-    td.addEventListener("mouseleave", function() {
-      year.style.display = "none";
-    });
-  });
-});
-
 </script>
 
