@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const jsyaml = require('js-yaml');
 
 module.exports = function (eleventyConfig) {
   // Add a shortcode to read and dump file content
@@ -7,14 +8,16 @@ module.exports = function (eleventyConfig) {
     const conferenceDataPath = '_data/conferences/';
     const files = fs.readdirSync(conferenceDataPath);
 
-    let contentDump = '';
+    let yamlData = '';
 
     files.forEach((file) => {
       const filePath = path.join(process.cwd(), conferenceDataPath, file);
       const fileContent = fs.readFileSync(filePath, 'utf-8').trim();
-      contentDump += `${fileContent}\n`;
+      yamlData += `${fileContent}\n`;
     });
 
-    return `${contentDump}`;
+    var events = jsyaml.load(yamlData);
+
+    return JSON.stringify(events, null, 2);
   });
 };

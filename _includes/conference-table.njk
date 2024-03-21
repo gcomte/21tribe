@@ -118,58 +118,49 @@ th {
   </tbody>
 </table>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-
-
 <script>
-  var yamlData = `
-{% dumpConferenceData %}
-  `;
-
-  var loadedEventData = jsyaml.load(yamlData);
+  var eventsData = {% dumpConferenceData %};
 
   function sortByFromDateAsc(events) {
     return events.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate));
   }
 
-console.log(loadedEventData);
-
-  var eventData = sortByFromDateAsc(loadedEventData);
+  var events = sortByFromDateAsc(eventsData);
 
   function createTable() {
     var tbody = document.getElementById("eventTableBody");
 
-    for (var i = 0; i < eventData.length; i++) {
+    for (var i = 0; i < events.length; i++) {
       var row = tbody.insertRow();
 
       var titleCell = row.insertCell();
       var titleLink = document.createElement("a");
-      titleLink.href = eventData[i].website;
-      titleLink.textContent = eventData[i].title;
+      titleLink.href = events[i].website;
+      titleLink.textContent = events[i].title;
       titleCell.appendChild(titleLink);
-      titleCell.setAttribute('data-label', textifyDate(eventData[i].fromDate, eventData[i].toDate));
+      titleCell.setAttribute('data-label', textifyDate(new Date(events[i].fromDate), new Date(events[i].toDate)));
 
       var dateCell = row.insertCell();
       dateCell.classList.add("mini-calendar-td");
-      dateCell.innerHTML = formatDate(eventData[i].fromDate, eventData[i].toDate);
+      dateCell.innerHTML = formatDate(new Date(events[i].fromDate), new Date(events[i].toDate));
 
       var cityCell = row.insertCell();
       var cityLink = document.createElement("a");
-      cityLink.href = eventData[i].gmaps;
-      cityLink.textContent = eventData[i].city;
+      cityLink.href = events[i].gmaps;
+      cityLink.textContent = events[i].city;
       cityCell.appendChild(cityLink);
       cityCell.setAttribute('data-label', 'City');
 
       var countryCell = row.insertCell();
-      countryCell.textContent = eventData[i].country;
+      countryCell.textContent = events[i].country;
       countryCell.setAttribute('data-label', 'Country');
 
       var topicCell = row.insertCell();
-      topicCell.textContent = eventData[i].topic;
+      topicCell.textContent = events[i].topic;
       topicCell.setAttribute('data-label', 'Topic');
 
       var languageCell = row.insertCell();
-      languageCell.textContent = eventData[i].language;
+      languageCell.textContent = events[i].language;
       languageCell.setAttribute('data-label', 'Language');
     }
   }
