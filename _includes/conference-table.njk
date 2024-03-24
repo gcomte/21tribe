@@ -45,11 +45,11 @@ th {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.continent-filters {
+#continent-filters {
   margin-bottom: 15px;
 }
 
-.continent-filters .button {
+#continent-filters .button {
   margin: 10px;
 }
 
@@ -110,7 +110,7 @@ th {
   }
 </style>
 
-<div class="continent-filters"></div>
+<div id="continent-filters"></div>
 
 <table>
   <thead>
@@ -129,34 +129,47 @@ th {
 </table>
 
 <script>
-  const continentFiltersDiv = document.querySelector('.continent-filters');
+  const continentFiltersDiv = document.querySelector('#continent-filters');
   const tbody = document.getElementById("eventTableBody");
 
   const eventsData = {% dumpConferenceData %};
   const continents = [...new Set(eventsData.map(event => event.continent))];
   let continentFilter = continents.map(continent => ({
     name: continent,
-    show: true
+    show: false
   }));
 
   continents.forEach(continent => {
     const button = document.createElement('div');
-    button.classList.add('button');
+    button.classList.add('button', 'button-white-with-border', 'filter-disabled');
     button.textContent = continent;
     continentFiltersDiv.appendChild(button);
 
     button.addEventListener('click', () => {
-      continentFilter.forEach(cf => {
-        if (continent === cf.name) {
-            if (cf.show === true) {
-              cf.show = false;
-              button.classList.add('button-white-with-border');
-            } else {
-              cf.show = true;
-              button.classList.remove('button-white-with-border');
-            }
-        }
-      });
+        continentFilter.forEach(cf => {
+          if (continent === cf.name) {
+              if (cf.show === true) {
+                cf.show = false;
+                button.classList.add('button-white-with-border');
+                button.classList.remove('button-dark');
+              } else {
+                cf.show = true;
+                button.classList.add('button-dark');
+                button.classList.remove('button-white-with-border');
+              }
+          }
+        });
+
+      const continentButtons = document.querySelectorAll("#continent-filters > .button");
+      if (continentFilter.every(continent => continent.show === false)) {
+        continentButtons.forEach(filterButton => {
+          filterButton.classList.add('filter-disabled');
+        });
+      } else {
+        continentButtons.forEach(filterButton => {
+          filterButton.classList.remove('filter-disabled');
+        });
+      }
 
       createTable();
     });
@@ -181,13 +194,13 @@ th {
   });
 
   function createTable() {
-  console.log(continentFilter);
     var events = sortByFromDateAsc(filterEventsByContinent(eventsData, continentFilter));
     drawTable(events);
   }
 
   function filterEventsByContinent(events, continentFilter) {
-    return events.filter(event => continentFilter.find(continent => continent.name === event.continent && continent.show));
+    const activatedContinents = continentFilter.filter(continent => continent.show);
+    return activatedContinents.length === 0 ? events : events.filter(event => activatedContinents.some(continent => continent.name === event.continent));
   }
 
   function sortByFromDateAsc(events) {

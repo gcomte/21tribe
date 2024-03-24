@@ -48,9 +48,7 @@ h1 {
 
 .button {
   display: inline-block;
-  color: #fe904d;
   font-weight: bold;
-  background-color: #333;
   padding: 10px 20px;
   text-decoration: none;
   border-radius: 5px;
@@ -58,8 +56,14 @@ h1 {
   cursor: pointer;
 }
 
+.button-dark {
+  color: #fe904d;
+  background-color: #333;
+  border: 1px solid transparent;
+}
+
 .button:hover {
-  background-color: #000;
+  border: 1px solid #fe904d !important;
 }
 
 .button a:hover{
@@ -67,13 +71,20 @@ h1 {
 }
 
 .button-white {
-  background: #fff !important;
+  background: #fff;
 }
 
 .button-white-with-border {
-  background: #fff !important;
+  background: #fff;
   border: 1px solid #333;
 }
+
+.filter-disabled {
+  background: #aaa !important;
+  color: white !important;
+  border: 1px solid transparent !important;
+}
+
 
 .button-small {
   padding: 5px 10px !important;
