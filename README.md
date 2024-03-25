@@ -19,7 +19,7 @@ Community-driven calendar for Bitcoin events: [21tribe.site](https://21tribe.sit
 ### Roadmap
 
 [ ] Filter by dates  
-[ ] Filter by language  
+[x] Filter by language  
 [x] Filter by continent  
 [ ] List past events  
 [ ] CSV export (using applied filters  

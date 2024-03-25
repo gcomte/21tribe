@@ -49,7 +49,7 @@ th {
   margin-bottom: 15px;
 }
 
-#continent-filters .button {
+.filter-group .button {
   margin: 10px;
 }
 
@@ -110,7 +110,10 @@ th {
   }
 </style>
 
-<div id="continent-filters"></div>
+<h4>Languages</h3>
+<div id="lang-filters" class="filter-group"></div>
+<h4>Continents</h3>
+<div id="continent-filters" class="filter-group"></div>
 
 <table>
   <thead>
@@ -129,15 +132,66 @@ th {
 </table>
 
 <script>
+  const langFiltersDiv = document.querySelector('#lang-filters');
   const continentFiltersDiv = document.querySelector('#continent-filters');
   const tbody = document.getElementById("eventTableBody");
 
   const eventsData = {% dumpConferenceData %};
+
   const continents = [...new Set(eventsData.map(event => event.continent))];
-  let continentFilter = continents.map(continent => ({
+  let continentFilter = continents.sort().map(continent => ({
     name: continent,
     show: false
   }));
+
+  const [userLang] = (navigator.language || navigator.userLanguage).split('-');
+  const languages = [...new Set(eventsData.map(event => event.language))];
+  let langFilter = languages
+  .sort()
+  .map(lang => ({
+    iso639: lang,
+    show: lang === userLang || lang === "en"
+  }));
+
+  langFilter.forEach(lang => {
+      const button = document.createElement('div');
+      if(lang.show) {
+        button.classList.add('button', 'button-dark');
+      } else {
+        button.classList.add('button', 'button-white-with-border');
+      }
+      button.textContent = lang.iso639;
+      langFiltersDiv.appendChild(button);
+
+      button.addEventListener('click', () => {
+          langFilter.forEach(lf => {
+            if (lang.iso639 === lf.iso639) {
+                if (lf.show === true) {
+                  lf.show = false;
+                  button.classList.add('button-white-with-border');
+                  button.classList.remove('button-dark');
+                } else {
+                  lf.show = true;
+                  button.classList.add('button-dark');
+                  button.classList.remove('button-white-with-border');
+                }
+            }
+          });
+
+        const langButtons = document.querySelectorAll("#lang-filters > .button");
+        if (langFilter.every(lang => lang.show === false)) {
+          langButtons.forEach(filterButton => {
+            filterButton.classList.add('filter-disabled');
+          });
+        } else {
+          langButtons.forEach(filterButton => {
+            filterButton.classList.remove('filter-disabled');
+          });
+        }
+
+        createTable();
+      });
+    });
 
   continents.forEach(continent => {
     const button = document.createElement('div');
@@ -194,17 +248,15 @@ th {
   });
 
   function createTable() {
-    var events = sortByFromDateAsc(filterEventsByContinent(eventsData, continentFilter));
+    const activeLanguages = langFilter.filter(continent => continent.show);
+    const activeContinents = continentFilter.filter(continent => continent.show);
+
+    events = eventsData
+               .filter(event => activeLanguages.length === 0 || activeLanguages.some(lang => lang.iso639 === event.language))
+               .filter(event => activeContinents.length === 0 || activeContinents.some(continent => continent.name === event.continent))
+               .sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate));
+
     drawTable(events);
-  }
-
-  function filterEventsByContinent(events, continentFilter) {
-    const activatedContinents = continentFilter.filter(continent => continent.show);
-    return activatedContinents.length === 0 ? events : events.filter(event => activatedContinents.some(continent => continent.name === event.continent));
-  }
-
-  function sortByFromDateAsc(events) {
-    return events.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate));
   }
 
   function drawTable(events) {
