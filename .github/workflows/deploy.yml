@@ -16,6 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Add site minifier plugin
+        run: |
+            REPLACEMENT_CODE='const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minifier");\neleventyConfig.addPlugin(eleventyPluginFilesMinifier);'
+            sed -i "s|\/\* CI ADDS MINIFIER PLUGIN HERE \*\/|${REPLACEMENT_CODE}|g" .eleventy.js
+
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:

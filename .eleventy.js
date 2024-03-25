@@ -31,9 +31,7 @@ module.exports = function (eleventyConfig) {
     return JSON.stringify(events, null, null);
   });
 
-
-  const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minifier");
-  eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
+  /* CI ADDS MINIFIER PLUGIN HERE */
 };
 
 
