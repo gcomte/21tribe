@@ -54,6 +54,10 @@ th {
 }
 
 @media only screen and (min-width: 601px) {
+    .only-mobile {
+      display: none;
+    }
+
   tr:hover {
     background: #333 !important;
     color: #fff;
@@ -65,6 +69,10 @@ th {
 }
 
 @media only screen and (max-width: 600px) {
+    .only-desktop {
+      display: none;
+    }
+
     /* For mobile devices, stack headers and data vertically */
     table thead {
       display: none;
@@ -72,9 +80,14 @@ th {
 
     table tbody tr {
       display: block;
-      margin-bottom: 28px;
+      margin-top: 4px;
+      margin-bottom: 4px;
       border: 1px #333 solid;
       background: #f2f2f2;
+    }
+
+    table tbody tr td:not(:first-child) {
+      display: none;
     }
 
     table tbody td {
@@ -97,15 +110,30 @@ th {
     }
 
     tr td:first-child {
+      font-weight: bold;
       background: #333;
       font-size: 16px;
-      color: #fff;
+      color: #fe904d;
     }
 
     tr td:nth-child(2){
-      display: none;
+      display: none !important;
     }
-  }
+
+    .show-table-body {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .show-table-body td {
+        display: block !important;
+    }
+
+    .button-wrapper {
+        display: flex;
+        justify-content: space-between;
+    }
+}
 </style>
 
 <h4>Languages</h4>
@@ -262,12 +290,22 @@ th {
 
     for (var i = 0; i < events.length; i++) {
       var row = tbody.insertRow();
+      row.addEventListener('click', (event) => {
+         event.currentTarget.classList.toggle("show-table-body");
+      });
 
       var titleCell = row.insertCell();
       var titleLink = document.createElement("a");
+      titleLink.classList.add("only-desktop");
       titleLink.href = events[i].website;
       titleLink.textContent = events[i].title;
       titleCell.appendChild(titleLink);
+
+      var titleText = document.createElement("span");
+      titleText.classList.add("only-mobile");
+      titleText.textContent = events[i].title;
+      titleCell.appendChild(titleText);
+
       titleCell.setAttribute('data-label', textifyDate(new Date(events[i].fromDate), new Date(events[i].toDate)));
 
       var dateCell = row.insertCell();
@@ -275,10 +313,20 @@ th {
       dateCell.innerHTML = formatDate(new Date(events[i].fromDate), new Date(events[i].toDate));
 
       var cityCell = row.insertCell();
+
       var cityLink = document.createElement("a");
+      cityLink.classList.add("only-desktop");
       cityLink.href = events[i].gmaps;
-      cityLink.textContent = events[i].city;
+
+      var cityText = document.createElement("span");
+      cityText.textContent = events[i].city;
+
+      var cityText2 = cityText.cloneNode(true);
+      cityText2.classList.add("only-mobile");
+
+      cityLink.appendChild(cityText);
       cityCell.appendChild(cityLink);
+      cityCell.appendChild(cityText2);
       cityCell.setAttribute('data-label', 'City');
 
       var countryCell = row.insertCell();
@@ -292,6 +340,30 @@ th {
       var languageCell = row.insertCell();
       languageCell.textContent = events[i].language;
       languageCell.setAttribute('data-label', 'Language');
+
+      var linksCell = row.insertCell();
+      linksCell.classList.add("only-mobile");
+
+      var buttonWrapper = document.createElement("div");
+      buttonWrapper.classList.add("button-wrapper");
+
+      var gmapsButtonLink = document.createElement("a");
+      var gmapsButton = document.createElement("div");
+      gmapsButton.classList.add("button", "button-dark");
+      gmapsButton.textContent = "Google Maps";
+      gmapsButtonLink.href = events[i].gmaps;
+      gmapsButtonLink.appendChild(gmapsButton);
+
+      var websiteButtonLink = document.createElement("a");
+      var websiteButton = document.createElement("div");
+      websiteButton.classList.add("button", "button-dark");
+      websiteButton.textContent = "Website";
+      websiteButtonLink.href = events[i].website;
+      websiteButtonLink.appendChild(websiteButton);
+
+      buttonWrapper.appendChild(gmapsButtonLink);
+      buttonWrapper.appendChild(websiteButtonLink);
+      linksCell.appendChild(buttonWrapper);
     }
   }
 
