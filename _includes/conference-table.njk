@@ -162,7 +162,8 @@ th {
   const continentFiltersDiv = document.querySelector('#continent-filters');
   const tbody = document.getElementById("eventTableBody");
 
-  const eventsData = {% dumpConferenceData %};
+  let eventsData = {% dumpConferenceData %};
+  eventsData = eventsData.filter(event => new Date(event.toDate) >= new Date().setHours(0, 0, 0, 0));
 
   const continents = [...new Set(eventsData.map(event => event.continent))];
   let continentFilter = continents.sort().map(continent => ({
