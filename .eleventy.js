@@ -41,10 +41,13 @@ function makeSyncGETRequest(url) {
 }
 
 function getContinent(country) {
-  const url = `https://restcountries.com/v3.1/name/${country}`;
+  const country_url_encoded = encodeURIComponent(country);
+  const url = `https://restcountries.com/v3.1/name/${country_url_encoded}`;
+  console.log(`Requesting ${url}`);
 
   const response = makeSyncGETRequest(url);
   const data = JSON.parse(response);
+  console.log("Received continent: " + data[0].continents[0]);
 
   return data[0].continents[0];
 }
